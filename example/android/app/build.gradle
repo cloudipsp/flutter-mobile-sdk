@@ -1,0 +1,51 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
+}
+
+apply plugin: 'com.android.application'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId 'com.cloudipsp.sdk.flutter'
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 1
+        versionName '0.0.1'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_KEYSTORE_NAME)
+            storePassword RELEASE_KEYSTORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS_NAME
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+
+dependencies {
+    implementation 'com.google.android.gms:play-services-base:17.6.0'
+    implementation 'com.google.android.gms:play-services-wallet:18.1.3'
+}
