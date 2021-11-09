@@ -1,11 +1,6 @@
-import './cvv_utils.dart';
+import 'package:cloudipsp_mobile/src/cvv_utils.dart';
 
-enum CardType {
-  VISA,
-  MASTERCARD,
-  MAESTRO,
-  UNKNOWN
-}
+enum CardType { VISA, MASTERCARD, MAESTRO, UNKNOWN }
 
 abstract class CreditCard {
   bool isValidCardNumber();
@@ -27,8 +22,7 @@ class PrivateCreditCard implements CreditCard {
   final int yy;
   final String cvv;
 
-  PrivateCreditCard(this.cardNumber, this.mm, this.yy, this.cvv): super();
-
+  PrivateCreditCard(this.cardNumber, this.mm, this.yy, this.cvv) : super();
 
   @override
   bool isValidCardNumber() {
@@ -71,7 +65,6 @@ class PrivateCreditCard implements CreditCard {
     final year = now.year - 2000;
     return (yy > year) || (yy == year && mm >= now.month);
   }
-
 
   @override
   bool isValidCvv() {

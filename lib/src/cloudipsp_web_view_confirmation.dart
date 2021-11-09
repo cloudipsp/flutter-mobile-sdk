@@ -1,8 +1,7 @@
 import 'dart:async';
 
+import 'package:cloudipsp_mobile/src/receipt.dart';
 import 'package:http/http.dart' as http;
-
-import './receipt.dart';
 
 abstract class CloudipspWebViewConfirmation {}
 

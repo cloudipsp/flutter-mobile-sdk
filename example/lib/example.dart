@@ -1,10 +1,10 @@
+import 'dart:async';
+
+import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:email_validator/email_validator.dart';
-
 import 'package:flutter/services.dart';
-import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
 
 class Example extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _ExampleState extends State<Example> {
   ExampleOrderMode _orderMode = ExampleOrderMode.Order;
   ExampleCardInputMode _cardInputMode = ExampleCardInputMode.CardInputView;
 
-  CloudipspWebViewConfirmation _cloudipspWebViewConfirmation;
+  CloudipspWebViewConfirmation? _cloudipspWebViewConfirmation;
   bool _supportsApplePay = false;
   bool _supportsGooglePay = false;
   final _tokenEditingController = TextEditingController(text: '');
@@ -40,7 +40,7 @@ class _ExampleState extends State<Example> {
   final GlobalKey _cloudipspWebViewKey = GlobalKey();
   final GlobalKey _creditCardInputKey = GlobalKey();
 
-  Cloudipsp _cloudipsp;
+  Cloudipsp? _cloudipsp;
 
   @override
   void initState() {
@@ -50,14 +50,14 @@ class _ExampleState extends State<Example> {
 
   Future<void> _checkAppleAndGooglePays() async {
     final cloudipsp = _getCloudipsp();
-    final supportsApplePay = await cloudipsp.supportsApplePay();
-    final supportsGooglePay = await cloudipsp.supportsGooglePay();
+    final bool? supportsApplePay = await cloudipsp.supportsApplePay();
+    final bool? supportsGooglePay = await cloudipsp.supportsGooglePay();
 
     if (!mounted) return;
 
     setState(() {
-      _supportsApplePay = supportsApplePay;
-      _supportsGooglePay = supportsGooglePay;
+      _supportsApplePay = supportsApplePay!;
+      _supportsGooglePay = supportsGooglePay!;
     });
   }
 
@@ -74,14 +74,14 @@ class _ExampleState extends State<Example> {
     } catch (e) {
       throw ("Invalid MerchantID");
     }
-    if (_cloudipsp == null || _cloudipsp.merchantId != merchantId) {
+    if (_cloudipsp == null || _cloudipsp!.merchantId != merchantId) {
       _cloudipsp = Cloudipsp(merchantId, _cloudipspWebViewHolder);
     }
-    return _cloudipsp;
+    return _cloudipsp!;
   }
 
-  void _payScope(Future<Receipt> Function(Cloudipsp cloudipsp) handler) async {
-    String info;
+  void _payScope(Future<Receipt?> Function(Cloudipsp cloudipsp) handler) async {
+    String? info;
     try {
       final cloudipsp = _getCloudipsp();
       final receipt = await handler(cloudipsp);
@@ -174,9 +174,9 @@ class _ExampleState extends State<Example> {
 
   void _onGetTokenPressed() async {
     _payScope((cloudipsp) async {
-      final token = await cloudipsp.getToken(_getOrder());
+      final String? token = await cloudipsp.getToken(_getOrder());
       setState(() {
-        _tokenEditingController.text = token;
+        _tokenEditingController.text = token!;
       });
       return null;
     });
@@ -185,9 +185,9 @@ class _ExampleState extends State<Example> {
   void _onApplePayPressed() async {
     _payScope((cloudipsp) async {
       if (_orderMode == ExampleOrderMode.Order) {
-        return _cloudipsp.applePay(_getOrder());
+        return _cloudipsp!.applePay(_getOrder());
       } else if (_orderMode == ExampleOrderMode.Token) {
-        return _cloudipsp.applePayToken(_getToken());
+        return _cloudipsp!.applePayToken(_getToken());
       } else {
         throw StateError('Unsupported order mode $_orderMode');
       }
@@ -197,9 +197,9 @@ class _ExampleState extends State<Example> {
   Future<void> _onGooglePayPressed() async {
     _payScope((cloudipsp) async {
       if (_orderMode == ExampleOrderMode.Order) {
-        return _cloudipsp.googlePay(_getOrder());
+        return _cloudipsp!.googlePay(_getOrder());
       } else if (_orderMode == ExampleOrderMode.Token) {
-        return _cloudipsp.googlePayToken(_getToken());
+        return _cloudipsp!.googlePayToken(_getToken());
       } else {
         throw StateError('Unsupported order mode $_orderMode');
       }
@@ -313,13 +313,13 @@ class _ExampleState extends State<Example> {
                 Text('Order mode:'),
                 DropdownButton(
                   value: _orderMode,
-                  onChanged: (ExampleOrderMode newOrderMode) {
+                  onChanged: (ExampleOrderMode? newOrderMode) {
                     if (newOrderMode == ExampleOrderMode.Order &&
                         _orderMode != ExampleOrderMode.Order) {
                       _tokenEditingController.text = '';
                     }
                     setState(() {
-                      _orderMode = newOrderMode;
+                      _orderMode = newOrderMode!;
                     });
                   },
                   items: ExampleOrderMode.values
@@ -347,9 +347,9 @@ class _ExampleState extends State<Example> {
               Text('Card Input Type:'),
               DropdownButton(
                 value: _cardInputMode,
-                onChanged: (ExampleCardInputMode newCardInputMode) {
+                onChanged: (ExampleCardInputMode? newCardInputMode) {
                   setState(() {
-                    _cardInputMode = newCardInputMode;
+                    _cardInputMode = newCardInputMode!;
                   });
                 },
                 items: ExampleCardInputMode.values
@@ -409,9 +409,9 @@ class _ExampleState extends State<Example> {
             flex: 1,
             child: DropdownButton(
               value: _selectedCurrency,
-              onChanged: (String newCurrency) {
+              onChanged: (String? newCurrency) {
                 setState(() {
-                  _selectedCurrency = newCurrency;
+                  _selectedCurrency = newCurrency!;
                 });
               },
               items: <String>['UAH', 'USD', 'EUR', 'GBP', 'RUB', 'KZT']
@@ -509,13 +509,12 @@ class _ExampleState extends State<Example> {
           children: mainUi,
         ),
       )),
-      Visibility(
-          visible: _cloudipspWebViewConfirmation != null,
-          child: Positioned.fill(
-              child: CloudipspWebView(
-            key: _cloudipspWebViewKey,
-            confirmation: _cloudipspWebViewConfirmation,
-          )))
+      if (_cloudipspWebViewConfirmation != null)
+        Positioned.fill(
+            child: CloudipspWebView(
+          key: _cloudipspWebViewKey,
+          confirmation: _cloudipspWebViewConfirmation!,
+        ))
     ]);
   }
 }

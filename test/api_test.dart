@@ -1,20 +1,20 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-
-import 'package:http/http.dart' as http;
+import 'dart:async';
 
 import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
 import 'package:cloudipsp_mobile/src/api.dart';
 import 'package:cloudipsp_mobile/src/credit_card.dart';
 import 'package:cloudipsp_mobile/src/platform_specific.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:mockito/mockito.dart';
 
 import './utils.dart';
 
 void main() {
-  Api api;
-  MockedHttpClient mockedHttpClient;
+  late Api api;
+  MockedHttpClient? mockedHttpClient;
   MockedPlatformSpecific mockedPlatformSpecific;
-  Order order;
+  late Order order;
 
   setUp(() {
     mockedHttpClient = MockedHttpClient();
@@ -28,7 +28,7 @@ void main() {
   group('getPaymentConfig', () {
     group('amount,currency,merchant', () {
       test('should should throw exception with unknown methodId', () async {
-        when(mockedHttpClient.post(any,
+        when(mockedHttpClient!.post(any!,
                 headers: anyNamed('headers'), body: anyNamed('body')))
             .thenAnswer(
                 (_) async => http.Response(RESPONSE_GET_PAYMENT_CONFIG, 200));
@@ -45,7 +45,7 @@ void main() {
       });
 
       test('should proceed successfully', () async {
-        when(mockedHttpClient.post(any,
+        when(mockedHttpClient!.post(any!,
                 headers: anyNamed('headers'), body: anyNamed('body')))
             .thenAnswer(
                 (_) async => http.Response(RESPONSE_GET_PAYMENT_CONFIG, 200));
@@ -57,7 +57,7 @@ void main() {
             methodId: 'TestMethodId',
             methodName: 'TestMethodName');
 
-        verify(mockedHttpClient.post(
+        verify(mockedHttpClient!.post(
                 Uri.parse('https://api.fondy.eu/api/checkout/ajax/mobile_pay'),
                 body:
                     '{"request":{"currency":"UAH","amount":123,"merchant_id":100500}}',
@@ -72,7 +72,7 @@ void main() {
 
     group('token', () {
       test('should should throw exception with unknown methodId', () async {
-        when(mockedHttpClient.post(any,
+        when(mockedHttpClient!.post(any!,
                 headers: anyNamed('headers'), body: anyNamed('body')))
             .thenAnswer(
                 (_) async => http.Response(RESPONSE_GET_PAYMENT_CONFIG, 200));
@@ -86,7 +86,7 @@ void main() {
                 'TestMethodName404 is not supported for token "SomeAlmostUniqueToken"'));
       });
       test('should proceed successfully', () async {
-        when(mockedHttpClient.post(any,
+        when(mockedHttpClient!.post(any!,
                 headers: anyNamed('headers'), body: anyNamed('body')))
             .thenAnswer(
                 (_) async => http.Response(RESPONSE_GET_PAYMENT_CONFIG, 200));
@@ -96,7 +96,7 @@ void main() {
             methodId: 'TestMethodId',
             methodName: 'TestMethodName');
 
-        verify(mockedHttpClient.post(
+        verify(mockedHttpClient!.post(
                 Uri.parse('https://api.fondy.eu/api/checkout/ajax/mobile_pay'),
                 body: '{"request":{"token":"SomeAlmostUniqueToken"}}',
                 headers: REQUEST_HEADERS))
@@ -108,29 +108,28 @@ void main() {
       });
     });
     test('throws api error', () async {
-      when(mockedHttpClient.post(any,
-          headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_ERROR, 200));
 
       await expectLater(
-              () => api.getPaymentConfig(
+          () => api.getPaymentConfig(
               token: 'SomeAlmostUniqueToken',
               methodId: 'TestMethodId',
               methodName: 'TestMethodName'),
-          thrownCloudipspApiError(
-              500111, 'ReqID44332211', 'SomeErrorMessage'));
+          thrownCloudipspApiError(500111, 'ReqID44332211', 'SomeErrorMessage'));
     });
   });
 
   group('getToken', () {
     test('should proceed successfully with minimal required params', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_GET_TOKEN, 200));
 
       final token = await api.getToken(100500, order);
 
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/token'),
               body:
                   '{"request":{"verification_type":"amount","merchant_data":"[]","order_id":"1234-45","merchant_id":"100500","required_rectoken":"N","preauth":"N","delayed":"N","currency":"UAH","amount":"123","verification":"N","response_url":"http://callback","order_desc":"Nice :)"}}',
@@ -140,8 +139,8 @@ void main() {
       expect(token, 'JustCreatedToken');
     });
     test('should proceed successfully with all possible params', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_GET_TOKEN, 200));
 
       order.productId = 'SomeProductId';
@@ -160,7 +159,7 @@ void main() {
 
       final token = await api.getToken(100500, order);
 
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/token'),
               body:
                   '{"request":{"verification_type":"amount","merchant_data":"SomeMerchantData","lifetime":22,"currency":"UAH","server_callback_url":"https://waitforcallback.com","product_id":"SomeProductId","response_url":"http://callback","order_desc":"Nice :)","payment_systems":"SomePaymentSystems","reservation_data":"0xFF","lang":"uk","version":"2.0.0","merchant_id":"100500","order_id":"1234-45","required_rectoken":"Y","preauth":"Y","delayed":"Y","amount":"123","verification":"Y","default_payment_system":"SomeDefaultPaymentSystem"}}',
@@ -170,8 +169,8 @@ void main() {
       expect(token, 'JustCreatedToken');
     });
     test('throws api error', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_ERROR, 200));
 
       await expectLater(() => api.getToken(100500, order),
@@ -181,13 +180,14 @@ void main() {
 
   group('getOrder', () {
     test('should proceed successfully and parse receipt as well', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_GET_ORDER, 200));
 
-      final receipt = await api.getOrder('SomeMaybeUniqueToken');
+      final receipt =
+          await (api.getOrder('SomeMaybeUniqueToken') as FutureOr<Receipt>);
 
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/merchant/order'),
               body: '{"request":{"token":"SomeMaybeUniqueToken"}}',
               headers: REQUEST_HEADERS))
@@ -222,8 +222,8 @@ void main() {
       expect(receipt.responseUrl, 'http://callback');
     });
     test('throws api error', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_ERROR, 200));
 
       await expectLater(() => api.getOrder('SomeMaybeUniqueToken'),
@@ -234,13 +234,13 @@ void main() {
   group('checkout', () {
     test('should proceed successfully without email', () async {
       final creditCard = PrivateCreditCard('4444555511116666', 11, 25, '111');
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_CHECKOUT, 200));
 
       final result =
           await api.checkout(creditCard, 'Token', null, 'http://callback.url');
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/ajax'),
               body:
                   '{"request":{"payment_system":"card","token":"Token","expiry_date":"1125","cvv2":"111","card_number":"4444555511116666"}}',
@@ -250,13 +250,13 @@ void main() {
     });
     test('should proceed successfully with email', () async {
       final creditCard = PrivateCreditCard('4444555511116666', 1, 25, '111');
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_CHECKOUT, 200));
 
       final result = await api.checkout(
           creditCard, 'Token', 'example@test.com', 'http://callback.url');
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/ajax'),
               body:
                   '{"request":{"email":"example@test.com","payment_system":"card","token":"Token","expiry_date":"0125","cvv2":"111","card_number":"4444555511116666"}}',
@@ -266,8 +266,8 @@ void main() {
     });
     test('throws api error', () async {
       final creditCard = PrivateCreditCard('4444555511116666', 1, 25, '111');
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_ERROR, 200));
 
       await expectLater(
@@ -280,13 +280,13 @@ void main() {
   group('checkoutNativePay', () {
     final someNativeData = {'someField': 'whichRepresentsNativeData'};
     test('should proceed successfully without email', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_CHECKOUT, 200));
 
       final result = await api.checkoutNativePay(
           'Token', null, 'SuperPaymentSystem', someNativeData);
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/ajax'),
               body:
                   '{"request":{"payment_system":"SuperPaymentSystem","data":{"someField":"whichRepresentsNativeData"},"token":"Token"}}',
@@ -295,13 +295,13 @@ void main() {
       expect(result['someUniqueField'], 'someUniqueValueWhichPassesTheTest');
     });
     test('should proceed successfully with email', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_CHECKOUT, 200));
 
       final result = await api.checkoutNativePay(
           'Token', 'example@test.com', 'SuperPaymentSystem', someNativeData);
-      verify(mockedHttpClient.post(
+      verify(mockedHttpClient!.post(
               Uri.parse('https://api.fondy.eu/api/checkout/ajax'),
               body:
                   '{"request":{"email":"example@test.com","payment_system":"SuperPaymentSystem","data":{"someField":"whichRepresentsNativeData"},"token":"Token"}}',
@@ -311,8 +311,8 @@ void main() {
     });
 
     test('throws api error', () async {
-      when(mockedHttpClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockedHttpClient!
+              .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_ERROR, 200));
 
       await expectLater(
@@ -323,14 +323,14 @@ void main() {
   });
 
   test('call3ds', () async {
-    when(mockedHttpClient.post(any,
-            headers: anyNamed('headers'), body: anyNamed('body')))
+    when(mockedHttpClient!
+            .post(any!, headers: anyNamed('headers'), body: anyNamed('body')))
         .thenAnswer((_) async => http.Response('Anything', 200));
 
     final response = await api.call3ds(
         'https://urltocheck.com', 'SomeBody', 'application/whoknows');
 
-    verify(mockedHttpClient.post(Uri.parse('https://urltocheck.com'),
+    verify(mockedHttpClient!.post(Uri.parse('https://urltocheck.com'),
             body: 'SomeBody', headers: REQUEST_HEADERS_3DS))
         .called(1);
     expect(response.body, 'Anything');

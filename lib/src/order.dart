@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:email_validator/email_validator.dart';
 
 enum Verification { amount, code }
@@ -7,26 +8,26 @@ enum Lang { ru, uk, en, lv, fr }
 
 class Order {
   final int amount;
-  final String currency;
-  final String id;
-  final String description;
-  final String email;
+  final String? currency;
+  final String? id;
+  final String? description;
+  final String? email;
 
-  String _productId;
-  String _paymentSystems;
-  String _defaultPaymentSystem;
+  String? _productId;
+  String? _paymentSystems;
+  String? _defaultPaymentSystem;
   int lifetime = -1;
-  String _merchantData;
+  String? _merchantData;
   bool preauth = false;
   bool requiredRecToken = false;
   bool verification = false;
   Verification _verificationType = Verification.amount;
-  String _recToken;
-  String _version;
-  Lang _lang;
-  String _serverCallbackUrl;
-  String _reservationData;
-  String _paymentSystem;
+  String? _recToken;
+  String? _version;
+  Lang? _lang;
+  String? _serverCallbackUrl;
+  String? _reservationData;
+  String? _paymentSystem;
   bool delayed = false;
 
   final Map<String, String> arguments = HashMap();
@@ -44,32 +45,32 @@ class Order {
     if (currency == null) {
       throw ArgumentError.notNull('currency');
     }
-    if (currency.length < 3) {
+    if (currency!.length < 3) {
       throw ArgumentError.value(currency, 'currency');
     }
     if (id == null) {
       throw ArgumentError.notNull('id');
     }
-    if (id.length == 0 || id.length > 1024) {
+    if (id!.length == 0 || id!.length > 1024) {
       throw ArgumentError("id's length should be > 0 && <= 1024");
     }
     if (description == null) {
       throw ArgumentError.notNull("description");
     }
-    if (description.length == 0 || description.length > 1024) {
+    if (description!.length == 0 || description!.length > 1024) {
       throw ArgumentError("description's length should be > 0 && <= 1024");
     }
-    if ((email != null && email.isNotEmpty) &&
-        !EmailValidator.validate(email)) {
+    if ((email != null && email!.isNotEmpty) &&
+        !EmailValidator.validate(email!)) {
       throw ArgumentError("email is not valid");
     }
   }
 
-  String get productId {
+  String? get productId {
     return _productId;
   }
 
-  set productId(String value) {
+  set productId(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("ProductId");
     }
@@ -79,33 +80,33 @@ class Order {
     _productId = value;
   }
 
-  String get paymentSystems {
+  String? get paymentSystems {
     return _paymentSystems;
   }
 
-  set paymentSystems(String value) {
+  set paymentSystems(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("paymentSystems");
     }
     _paymentSystems = value;
   }
 
-  String get defaultPaymentSystem {
+  String? get defaultPaymentSystem {
     return _defaultPaymentSystem;
   }
 
-  set defaultPaymentSystem(String value) {
+  set defaultPaymentSystem(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("defaultPaymentSystem");
     }
     _defaultPaymentSystem = value;
   }
 
-  String get merchantData {
+  String? get merchantData {
     return _merchantData;
   }
 
-  set merchantData(String value) {
+  set merchantData(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("merchantData");
     }
@@ -120,29 +121,29 @@ class Order {
     return _verificationType;
   }
 
-  set verificationType(Verification value) {
+  set verificationType(Verification? value) {
     if (value == null) {
       throw ArgumentError.notNull("verificationType");
     }
     _verificationType = value;
   }
 
-  String get recToken {
+  String? get recToken {
     return _recToken;
   }
 
-  set recToken(String value) {
+  set recToken(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("recToken");
     }
     _recToken = value;
   }
 
-  String get version {
+  String? get version {
     return _version;
   }
 
-  set version(String value) {
+  set version(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("version");
     }
@@ -152,22 +153,22 @@ class Order {
     _version = value;
   }
 
-  Lang get lang {
+  Lang? get lang {
     return _lang;
   }
 
-  set lang(Lang value) {
+  set lang(Lang? value) {
     if (value == null) {
       throw ArgumentError.notNull("lang");
     }
     _lang = value;
   }
 
-  String get serverCallbackUrl {
+  String? get serverCallbackUrl {
     return _serverCallbackUrl;
   }
 
-  set serverCallbackUrl(String value) {
+  set serverCallbackUrl(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("serverCallbackUrl");
     }
@@ -178,11 +179,11 @@ class Order {
     _serverCallbackUrl = value;
   }
 
-  String get reservationData {
+  String? get reservationData {
     return _reservationData;
   }
 
-  set reservationData(String value) {
+  set reservationData(String? value) {
     if (value == null) {
       throw ArgumentError.notNull("reservationData");
     }

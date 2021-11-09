@@ -1,12 +1,10 @@
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import './utils.dart';
 
 void main() {
-  group('constructor', ()
-  {
+  group('constructor', () {
     test('should throw exception with wrong amount', () {
       expect(() => Order(-1, '', '', '', ''),
           thrownArgumentError('Amount should be more than 0'));
@@ -72,9 +70,8 @@ void main() {
     });
   });
 
-  group('params', ()
-  {
-    Order order;
+  group('params', () {
+    Order? order;
 
     setUp(() {
       order = Order(1, 'UAH', '1234-45', 'Nice :)', 'example@test.com');
@@ -86,141 +83,148 @@ void main() {
 
     group('productId', () {
       test('should throw exception with null value', () {
-        expect(() => order.productId = null,
+        expect(() => order!.productId = null,
             thrownArgumentErrorNotNull('ProductId'));
       });
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.productId = getRandomString(2000),
-            thrownArgumentError('ProductId should be not more than 1024 symbols'));
+        expect(
+            () => order!.productId = getRandomString(2000),
+            thrownArgumentError(
+                'ProductId should be not more than 1024 symbols'));
       });
       test('should save valid value', () {
-        order.productId = 'SomeRandomProductId';
-        expect(order.productId, 'SomeRandomProductId');
+        order!.productId = 'SomeRandomProductId';
+        expect(order!.productId, 'SomeRandomProductId');
       });
     });
 
     group('paymentSystems', () {
       test('should throw exception with null value', () {
-        expect(() => order.paymentSystems = null,
+        expect(() => order!.paymentSystems = null,
             thrownArgumentErrorNotNull('paymentSystems'));
       });
       test('should save valid value', () {
-        order.paymentSystems = 'SomeRandomPaymentSystem';
-        expect(order.paymentSystems, 'SomeRandomPaymentSystem');
+        order!.paymentSystems = 'SomeRandomPaymentSystem';
+        expect(order!.paymentSystems, 'SomeRandomPaymentSystem');
       });
     });
 
     group('defaultPaymentSystem', () {
       test('should throw exception with null value', () {
-        expect(() => order.defaultPaymentSystem = null,
+        expect(() => order!.defaultPaymentSystem = null,
             thrownArgumentErrorNotNull('defaultPaymentSystem'));
       });
       test('should save valid value', () {
-        order.defaultPaymentSystem = 'SomeRandomDefaultPaymentSystem';
-        expect(order.defaultPaymentSystem, 'SomeRandomDefaultPaymentSystem');
+        order!.defaultPaymentSystem = 'SomeRandomDefaultPaymentSystem';
+        expect(order!.defaultPaymentSystem, 'SomeRandomDefaultPaymentSystem');
       });
     });
 
     group('merchantData', () {
       test('should throw exception with null value', () {
-        expect(() => order.merchantData = null,
+        expect(() => order!.merchantData = null,
             thrownArgumentErrorNotNull('merchantData'));
       });
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.merchantData = getRandomString(2049),
-            thrownArgumentError('MerchantData should be not more than 2048 symbols'));
+        expect(
+            () => order!.merchantData = getRandomString(2049),
+            thrownArgumentError(
+                'MerchantData should be not more than 2048 symbols'));
       });
       test('should save valid value', () {
-        order.merchantData = 'SomeRandomMerchantData';
-        expect(order.merchantData, 'SomeRandomMerchantData');
+        order!.merchantData = 'SomeRandomMerchantData';
+        expect(order!.merchantData, 'SomeRandomMerchantData');
       });
     });
 
     group('verificationType', () {
       test('should throw exception with null value', () {
-        expect(() => order.verificationType = null,
+        expect(() => order!.verificationType = null,
             thrownArgumentErrorNotNull('verificationType'));
       });
       test('should save valid(amount) value', () {
-        order.verificationType = Verification.amount;
-        expect(order.verificationType, Verification.amount);
+        order!.verificationType = Verification.amount;
+        expect(order!.verificationType, Verification.amount);
       });
       test('should save valid(code) value', () {
-        order.verificationType = Verification.code;
-        expect(order.verificationType, Verification.code);
+        order!.verificationType = Verification.code;
+        expect(order!.verificationType, Verification.code);
       });
     });
 
     group('recToken', () {
       test('should throw exception with null value', () {
-        expect(() => order.recToken = null,
+        expect(() => order!.recToken = null,
             thrownArgumentErrorNotNull('recToken'));
       });
       test('should save valid value', () {
-        order.recToken = 'SomeRandomRecToken';
-        expect(order.recToken, 'SomeRandomRecToken');
+        order!.recToken = 'SomeRandomRecToken';
+        expect(order!.recToken, 'SomeRandomRecToken');
       });
     });
 
     group('version', () {
       test('should throw exception with null value', () {
-        expect(() => order.version = null,
-            thrownArgumentErrorNotNull('version'));
+        expect(
+            () => order!.version = null, thrownArgumentErrorNotNull('version'));
       });
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.version = getRandomString(11),
+        expect(() => order!.version = getRandomString(11),
             thrownArgumentError('version should be not more than 10 symbols'));
       });
       test('should save valid value', () {
-        order.version = '2.0';
-        expect(order.version, '2.0');
+        order!.version = '2.0';
+        expect(order!.version, '2.0');
       });
     });
 
     group('lang', () {
       test('should throw exception with null value', () {
-        expect(() => order.lang = null,
-            thrownArgumentErrorNotNull('lang'));
+        expect(() => order!.lang = null, thrownArgumentErrorNotNull('lang'));
       });
       test('should save valid(uk) value', () {
-        order.lang = Lang.uk;
-        expect(order.lang, Lang.uk);
+        order!.lang = Lang.uk;
+        expect(order!.lang, Lang.uk);
       });
       test('should save valid(en) value', () {
-        order.lang = Lang.en;
-        expect(order.lang, Lang.en);
+        order!.lang = Lang.en;
+        expect(order!.lang, Lang.en);
       });
     });
 
     group('serverCallbackUrl', () {
       test('should throw exception with null value', () {
-        expect(() => order.serverCallbackUrl = null,
+        expect(() => order!.serverCallbackUrl = null,
             thrownArgumentErrorNotNull('serverCallbackUrl'));
       });
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.serverCallbackUrl = getRandomString(2049),
-            thrownArgumentError('server callback url should be not more than 2048 symbols'));
+        expect(
+            () => order!.serverCallbackUrl = getRandomString(2049),
+            thrownArgumentError(
+                'server callback url should be not more than 2048 symbols'));
       });
       test('should save valid value', () {
-        order.serverCallbackUrl = 'SomeRandomServerCallbackUrl';
-        expect(order.serverCallbackUrl, 'SomeRandomServerCallbackUrl');
+        order!.serverCallbackUrl = 'SomeRandomServerCallbackUrl';
+        expect(order!.serverCallbackUrl, 'SomeRandomServerCallbackUrl');
       });
     });
 
     group('reservationData', () {
       test('should throw exception with null value', () {
-        expect(() => order.reservationData = null,
+        expect(() => order!.reservationData = null,
             thrownArgumentErrorNotNull('reservationData'));
       });
       test('should save valid value', () {
-        order.reservationData = 'SomeRandomReservationData';
-        expect(order.reservationData, 'SomeRandomReservationData');
+        order!.reservationData = 'SomeRandomReservationData';
+        expect(order!.reservationData, 'SomeRandomReservationData');
       });
     });
 
     test('should be able to add extra argument', () {
-      order.addArgument('MySuperUniqueArgumentName', 'MySuperUniqueArgumentValue');
-      expect(order.arguments['MySuperUniqueArgumentName'], 'MySuperUniqueArgumentValue');
+      order!.addArgument(
+          'MySuperUniqueArgumentName', 'MySuperUniqueArgumentValue');
+      expect(order!.arguments['MySuperUniqueArgumentName'],
+          'MySuperUniqueArgumentValue');
     });
   });
 }
