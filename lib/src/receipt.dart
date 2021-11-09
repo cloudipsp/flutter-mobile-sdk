@@ -1,6 +1,5 @@
+import 'package:cloudipsp_mobile/src/credit_card.dart';
 import 'package:flutter/foundation.dart';
-
-import './credit_card.dart';
 
 enum Status { created, processing, declined, approved, expired, reversed }
 
@@ -9,34 +8,34 @@ enum TransactionType { purchase, reverse, verification }
 enum VerificationStatus { verified, incorrect, failed, created }
 
 class Receipt {
-  final String maskedCard;
-  final int cardBin;
+  final String? maskedCard;
+  final int? cardBin;
   final int amount;
-  final int paymentId;
-  final String currency;
+  final int? paymentId;
+  final String? currency;
   final Status status;
-  final TransactionType transactionType;
-  final String senderCellPhone;
-  final String senderAccount;
-  final CardType cardType;
-  final String rrn;
-  final String approvalCode;
-  final int responseCode;
-  final String productId;
-  final String recToken;
-  final DateTime recTokenLifeTime;
-  final int reversalAmount;
-  final int settlementAmount;
-  final String settlementCurrency;
-  final DateTime settlementDate;
-  final int eci;
-  final int fee;
-  final int actualAmount;
-  final String actualCurrency;
-  final String paymentSystem;
-  final VerificationStatus verificationStatus;
-  final String signature;
-  final String responseUrl;
+  final TransactionType? transactionType;
+  final String? senderCellPhone;
+  final String? senderAccount;
+  final CardType? cardType;
+  final String? rrn;
+  final String? approvalCode;
+  final int? responseCode;
+  final String? productId;
+  final String? recToken;
+  final DateTime? recTokenLifeTime;
+  final int? reversalAmount;
+  final int? settlementAmount;
+  final String? settlementCurrency;
+  final DateTime? settlementDate;
+  final int? eci;
+  final int? fee;
+  final int? actualAmount;
+  final String? actualCurrency;
+  final String? paymentSystem;
+  final VerificationStatus? verificationStatus;
+  final String? signature;
+  final String? responseUrl;
 
   Receipt(
       this.maskedCard,
@@ -68,7 +67,7 @@ class Receipt {
       this.signature,
       this.responseUrl);
 
-  static Receipt fromJson(dynamic orderData, String responseUrl) {
+  static Receipt? fromJson(dynamic orderData, String? responseUrl) {
     try {
       return Receipt(
           orderData['masked_card'],
@@ -104,7 +103,7 @@ class Receipt {
     }
   }
 
-  static DateTime parseDate(String value) {
+  static DateTime? parseDate(String? value) {
     //expected 05.01.2021 01:31:04
     //why should we use own parser instead of import external library ?
     //because we are library and we:
@@ -136,32 +135,36 @@ class Receipt {
     }
   }
 
-  static Status _statusFromString(String value) {
-    return Status.values.firstWhere((element) => describeEnum(element) == value);
+  static Status _statusFromString(String? value) {
+    return Status.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static CardType _cardTypeFromString(String value) {
+  static CardType? _cardTypeFromString(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
-    return CardType.values.firstWhere((element) => describeEnum(element) == value);
+    return CardType.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static TransactionType _transactionTypeFromString(String value) {
+  static TransactionType? _transactionTypeFromString(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
-    return TransactionType.values.firstWhere((element) => describeEnum(element) == value);
+    return TransactionType.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static VerificationStatus _verificationStatusFromString(String value) {
+  static VerificationStatus? _verificationStatusFromString(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
-    return VerificationStatus.values.firstWhere((element) => describeEnum(element) == value);
+    return VerificationStatus.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static int _safeIntParse(dynamic value) {
+  static int? _safeIntParse(dynamic value) {
     if (value is int) {
       return value;
     }

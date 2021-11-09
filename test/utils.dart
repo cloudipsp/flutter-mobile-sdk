@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:cloudipsp_mobile/src/cloudipsp_error.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
 Random _rnd = Random();
@@ -16,8 +16,8 @@ Matcher thrownArgumentError(String message) {
 }
 
 Matcher thrownArgumentErrorNotNull(String name) {
-  return throwsA(TypeMatcher<ArgumentError>()
-      .having((e) => e.name, 'name', name));
+  return throwsA(
+      TypeMatcher<ArgumentError>().having((e) => e.name, 'name', name));
 }
 
 Matcher thrownArgumentErrorValue(dynamic invalidValue, String name) {
@@ -32,13 +32,12 @@ Matcher thrownUnsupported(String message) {
 }
 
 Matcher stateError(String message) {
-  return TypeMatcher<StateError>()
-      .having((e) => e.message, 'message', message);
+  return TypeMatcher<StateError>().having((e) => e.message, 'message', message);
 }
 
 Matcher thrownStateError(String message) {
-  return throwsA(TypeMatcher<StateError>()
-      .having((e) => e.message, 'message', message));
+  return throwsA(
+      TypeMatcher<StateError>().having((e) => e.message, 'message', message));
 }
 
 Matcher thrownCloudipspUserError(String code, String message) {
