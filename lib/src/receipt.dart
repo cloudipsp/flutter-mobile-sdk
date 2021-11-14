@@ -22,6 +22,8 @@ class Receipt {
   final String? approvalCode;
   final int? responseCode;
   final String? productId;
+  final String orderId;
+  final DateTime? orderTime;
   final String? recToken;
   final DateTime? recTokenLifeTime;
   final int? reversalAmount;
@@ -52,6 +54,8 @@ class Receipt {
       this.approvalCode,
       this.responseCode,
       this.productId,
+      this.orderId,
+      this.orderTime,
       this.recToken,
       this.recTokenLifeTime,
       this.reversalAmount,
@@ -84,6 +88,8 @@ class Receipt {
           orderData['approval_code'],
           _safeIntParse(orderData['response_code']),
           orderData['product_id'],
+          orderData['order_id'],
+          parseDate(orderData['order_time']),
           orderData['rectoken'],
           parseDate(orderData['rectoken_lifetime']),
           int.tryParse(orderData['reversal_amount']),
