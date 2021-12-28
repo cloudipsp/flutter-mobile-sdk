@@ -137,28 +137,32 @@ class Receipt {
   }
 
   static Status _statusFromString(String value) {
-    return Status.values.firstWhere((element) => describeEnum(element) == value);
+    return Status.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
   static CardType _cardTypeFromString(String value) {
     if (value == null || value.isEmpty) {
       return null;
     }
-    return CardType.values.firstWhere((element) => describeEnum(element) == value);
+    return CardType.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
   static TransactionType _transactionTypeFromString(String value) {
     if (value == null || value.isEmpty) {
       return null;
     }
-    return TransactionType.values.firstWhere((element) => describeEnum(element) == value);
+    return TransactionType.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
   static VerificationStatus _verificationStatusFromString(String value) {
     if (value == null || value.isEmpty) {
       return null;
     }
-    return VerificationStatus.values.firstWhere((element) => describeEnum(element) == value);
+    return VerificationStatus.values
+        .firstWhere((element) => describeEnum(element) == value);
   }
 
   static int _safeIntParse(dynamic value) {

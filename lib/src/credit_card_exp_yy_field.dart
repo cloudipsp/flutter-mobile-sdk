@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 abstract class CreditCardExpYyField extends Widget {
-  factory CreditCardExpYyField({InputDecoration decoration}) = CreditCardExpYyFieldImpl;
+  factory CreditCardExpYyField({InputDecoration decoration}) =
+      CreditCardExpYyFieldImpl;
 }
 
-class CreditCardExpYyFieldImpl extends StatelessWidget implements CreditCardExpYyField {
+class CreditCardExpYyFieldImpl extends StatelessWidget
+    implements CreditCardExpYyField {
   final textEditingController = TextEditingController(text: '');
   final InputDecoration _decoration;
 
-  CreditCardExpYyFieldImpl({InputDecoration decoration}): _decoration = decoration;
+  CreditCardExpYyFieldImpl({InputDecoration decoration})
+      : _decoration = decoration;
 
   @override
   Widget build(BuildContext context) {
