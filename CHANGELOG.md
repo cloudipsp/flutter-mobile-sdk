@@ -1,3 +1,6 @@
+## 0.2.0
+* Migrated to null-safety
+
 ## 0.0.1
 
-* TODO: Describe initial release.
+* First release of mobile cloudipsp functionality

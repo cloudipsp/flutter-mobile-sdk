@@ -36,4 +36,5 @@ coverage/
 .dart_tool/
 .metadata
 .packages
- pubspec.lock
+pubspec.lock
+example/pubspec.lock
