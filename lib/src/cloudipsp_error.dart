@@ -7,7 +7,7 @@ class CloudipspError extends Error {
 class CloudipspUserError extends CloudipspError {
   String code;
 
-  CloudipspUserError(this.code, String message) : super(message);
+  CloudipspUserError(this.code, String? message) : super(message == null ? '' : message);
 }
 
 class CloudipspApiError extends CloudipspError {

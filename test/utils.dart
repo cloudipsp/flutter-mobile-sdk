@@ -15,11 +15,6 @@ Matcher thrownArgumentError(String message) {
       .having((e) => e.message, 'message', message));
 }
 
-Matcher thrownArgumentErrorNotNull(String name) {
-  return throwsA(TypeMatcher<ArgumentError>()
-      .having((e) => e.name, 'name', name));
-}
-
 Matcher thrownArgumentErrorValue(dynamic invalidValue, String name) {
   return throwsA(TypeMatcher<ArgumentError>()
       .having((e) => e.invalidValue, 'invalidValue', invalidValue)

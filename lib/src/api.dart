@@ -24,12 +24,12 @@ class Api {
       : this.withHttpClient(platformSpecific, http.Client(), kDebugMode);
 
   Future<dynamic> getPaymentConfig(
-      {String token,
-      int merchantId,
-      int amount,
-      String currency,
-      String methodId,
-      String methodName}) async {
+      {String? token,
+      int? merchantId,
+      int? amount,
+      String? currency,
+      String? methodId,
+      String? methodName}) async {
     final Map<String, dynamic> request = HashMap();
     if (token != null) {
       request['token'] = token;
@@ -75,35 +75,35 @@ class Api {
     request['order_desc'] = order.description;
     request['amount'] = order.amount.toString();
     request['currency'] = order.currency;
-    if (order.productId != null && order.productId.isNotEmpty) {
+    if (order.productId != null && order.productId!.isNotEmpty) {
       request['product_id'] = order.productId;
     }
-    if (order.paymentSystems != null && order.paymentSystems.isNotEmpty) {
+    if (order.paymentSystems != null && order.paymentSystems!.isNotEmpty) {
       request['payment_systems'] = order.paymentSystems;
     }
     if (order.defaultPaymentSystem != null &&
-        order.defaultPaymentSystem.isNotEmpty) {
+        order.defaultPaymentSystem!.isNotEmpty) {
       request['default_payment_system'] = order.defaultPaymentSystem;
     }
     if (order.lifetime != -1) {
       request['lifetime'] = order.lifetime;
     }
-    if (order.merchantData == null || order.merchantData.isEmpty) {
+    if (order.merchantData == null || order.merchantData!.isEmpty) {
       request['merchant_data'] = '[]';
     } else {
       request['merchant_data'] = order.merchantData;
     }
-    if (order.version != null && order.version.isNotEmpty) {
+    if (order.version != null && order.version!.isNotEmpty) {
       request['version'] = order.version;
     }
-    if (order.serverCallbackUrl != null && order.serverCallbackUrl.isNotEmpty) {
+    if (order.serverCallbackUrl != null && order.serverCallbackUrl!.isNotEmpty) {
       request['server_callback_url'] = order.serverCallbackUrl;
     }
-    if (order.reservationData != null && order.reservationData.isNotEmpty) {
+    if (order.reservationData != null && order.reservationData!.isNotEmpty) {
       request['reservation_data'] = order.reservationData;
     }
     if (order.lang != null) {
-      request['lang'] = describeEnum(order.lang);
+      request['lang'] = describeEnum(order.lang!);
     }
     request['preauth'] = order.preauth ? 'Y' : 'N';
     request['required_rectoken'] = order.requiredRecToken ? 'Y' : 'N';
@@ -122,11 +122,15 @@ class Api {
   Future<Receipt> getOrder(String token) async {
     final response =
         await _call('api/checkout/merchant/order', {'token': token});
-    return Receipt.fromJson(response['order_data'], response['response_url']);
+    final receipt = Receipt.fromJson(response['order_data'], response['response_url']);
+    if (receipt == null) {
+      throw CloudipspError('Unable to parse receipt');
+    }
+    return receipt;
   }
 
   Future<dynamic> checkout(PrivateCreditCard creditCard, String token,
-      String email, String callbackUrl) {
+      String? email, String callbackUrl) {
     final Map<String, dynamic> request = HashMap();
     request['card_number'] = creditCard.cardNumber;
     request['expiry_date'] =
@@ -141,7 +145,7 @@ class Api {
   }
 
   Future<dynamic> checkoutNativePay(
-      String token, String email, String paymentSystem, dynamic data) {
+      String token, String? email, String paymentSystem, dynamic data) {
     final Map<String, dynamic> request = HashMap();
     request['token'] = token;
     if (email != null && email.isNotEmpty) {

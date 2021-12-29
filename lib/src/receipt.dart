@@ -10,31 +10,31 @@ enum VerificationStatus { verified, incorrect, failed, created }
 
 class Receipt {
   final String maskedCard;
-  final int cardBin;
+  final int? cardBin;
   final int amount;
   final int paymentId;
   final String currency;
   final Status status;
-  final TransactionType transactionType;
+  final TransactionType? transactionType;
   final String senderCellPhone;
   final String senderAccount;
-  final CardType cardType;
+  final CardType? cardType;
   final String rrn;
   final String approvalCode;
-  final int responseCode;
+  final int? responseCode;
   final String productId;
-  final String recToken;
-  final DateTime recTokenLifeTime;
-  final int reversalAmount;
-  final int settlementAmount;
-  final String settlementCurrency;
-  final DateTime settlementDate;
-  final int eci;
-  final int fee;
-  final int actualAmount;
-  final String actualCurrency;
+  final String? recToken;
+  final DateTime? recTokenLifeTime;
+  final int? reversalAmount;
+  final int? settlementAmount;
+  final String? settlementCurrency;
+  final DateTime? settlementDate;
+  final int? eci;
+  final int? fee;
+  final int? actualAmount;
+  final String? actualCurrency;
   final String paymentSystem;
-  final VerificationStatus verificationStatus;
+  final VerificationStatus? verificationStatus;
   final String signature;
   final String responseUrl;
 
@@ -68,7 +68,7 @@ class Receipt {
       this.signature,
       this.responseUrl);
 
-  static Receipt fromJson(dynamic orderData, String responseUrl) {
+  static Receipt? fromJson(dynamic orderData, String responseUrl) {
     try {
       return Receipt(
           orderData['masked_card'],
@@ -104,7 +104,7 @@ class Receipt {
     }
   }
 
-  static DateTime parseDate(String value) {
+  static DateTime? parseDate(String? value) {
     //expected 05.01.2021 01:31:04
     //why should we use own parser instead of import external library ?
     //because we are library and we:
@@ -141,7 +141,7 @@ class Receipt {
         .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static CardType _cardTypeFromString(String value) {
+  static CardType? _cardTypeFromString(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
@@ -149,7 +149,7 @@ class Receipt {
         .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static TransactionType _transactionTypeFromString(String value) {
+  static TransactionType? _transactionTypeFromString(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
@@ -157,7 +157,7 @@ class Receipt {
         .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static VerificationStatus _verificationStatusFromString(String value) {
+  static VerificationStatus? _verificationStatusFromString(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
@@ -165,7 +165,7 @@ class Receipt {
         .firstWhere((element) => describeEnum(element) == value);
   }
 
-  static int _safeIntParse(dynamic value) {
+  static int? _safeIntParse(dynamic value) {
     if (value is int) {
       return value;
     }

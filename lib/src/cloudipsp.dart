@@ -42,7 +42,7 @@ abstract class Cloudipsp {
 
 class CloudipspImpl implements Cloudipsp {
   final int merchantId;
-  CloudipspWebViewHolder _cloudipspWebViewHolder;
+  late CloudipspWebViewHolder _cloudipspWebViewHolder;
   final Api _api;
   final Native _native;
   final PlatformSpecific _platformSpecific;
@@ -54,18 +54,15 @@ class CloudipspImpl implements Cloudipsp {
     if (!(merchantId > 0)) {
       throw ArgumentError.value(merchantId, 'merchantId');
     }
-    if (cloudipspWebViewHolder == null) {
-      throw ArgumentError.notNull('cloudipspWebViewHolder');
-    }
     _cloudipspWebViewHolder = cloudipspWebViewHolder;
   }
 
   CloudipspImpl.withMocks({
-    this.merchantId,
-    CloudipspWebViewHolder cloudipspWebViewHolder,
-    Api api,
-    Native native,
-    PlatformSpecific platformSpecific,
+    required this.merchantId,
+    required CloudipspWebViewHolder cloudipspWebViewHolder,
+    required Api api,
+    required Native native,
+    required PlatformSpecific platformSpecific,
   })  : _api = api,
         _native = native,
         _platformSpecific = platformSpecific,
@@ -99,54 +96,34 @@ class CloudipspImpl implements Cloudipsp {
 
   @override
   Future<String> getToken(Order order) {
-    if (order == null) {
-      throw ArgumentError.notNull("order");
-    }
     return _api.getToken(merchantId, order);
   }
 
   @override
   Future<Receipt> pay(CreditCard card, Order order) async {
-    if (card == null) {
-      throw ArgumentError.notNull("card");
-    }
     if (!card.isValid() || !(card is PrivateCreditCard)) {
       throw ArgumentError("CreditCard is not valid");
     }
-    if (order == null) {
-      throw ArgumentError.notNull("order");
-    }
-    final privateCard = card as PrivateCreditCard;
     final token = await _api.getToken(merchantId, order);
     final checkoutResponse =
-        await _api.checkout(privateCard, token, order.email, Api.URL_CALLBACK);
+        await _api.checkout(card, token, order.email, Api.URL_CALLBACK);
     return _payContinue(checkoutResponse, token, Api.URL_CALLBACK);
   }
 
   @override
   Future<Receipt> payToken(CreditCard card, String token) async {
-    if (card == null) {
-      throw ArgumentError.notNull("card");
-    }
     if (!card.isValid() || !(card is PrivateCreditCard)) {
       throw ArgumentError("CreditCard is not valid");
     }
-    if (token == null) {
-      throw ArgumentError.notNull("token");
-    }
-    final privateCard = card as PrivateCreditCard;
     final order = await _api.getOrder(token);
     final checkoutResponse =
-        await _api.checkout(privateCard, token, null, order.responseUrl);
+        await _api.checkout(card, token, null, order.responseUrl);
     return await _payContinue(checkoutResponse, token, Api.URL_CALLBACK);
   }
 
   @override
   Future<Receipt> applePay(Order order) async {
     _assertApplePay();
-    if (order == null) {
-      throw ArgumentError.notNull("order");
-    }
     final config = await _api.getPaymentConfig(
       merchantId: merchantId,
       amount: order.amount,
@@ -178,9 +155,6 @@ class CloudipspImpl implements Cloudipsp {
   @override
   Future<Receipt> applePayToken(String token) async {
     _assertApplePay();
-    if (token == null) {
-      throw ArgumentError.notNull("token");
-    }
     final config = await _api.getPaymentConfig(
       token: token,
       methodId: 'https://apple.com/apple-pay',
@@ -211,9 +185,6 @@ class CloudipspImpl implements Cloudipsp {
   @override
   Future<Receipt> googlePay(Order order) async {
     _assertGooglePay();
-    if (order == null) {
-      throw ArgumentError.notNull("order");
-    }
 
     final config = await _api.getPaymentConfig(
       merchantId: merchantId,
@@ -238,9 +209,6 @@ class CloudipspImpl implements Cloudipsp {
   @override
   Future<Receipt> googlePayToken(String token) async {
     _assertGooglePay();
-    if (token == null) {
-      throw ArgumentError.notNull("token");
-    }
     final order = await _api.getOrder(token);
     final config = await _api.getPaymentConfig(
       token: token,
@@ -271,7 +239,7 @@ class CloudipspImpl implements Cloudipsp {
     return _api.getOrder(token);
   }
 
-  Future<Receipt> _threeDS(
+  Future<Receipt?> _threeDS(
       String url, dynamic checkoutResponse, String callbackUrl) async {
     String body;
     String contentType;
@@ -291,7 +259,7 @@ class CloudipspImpl implements Cloudipsp {
     }
 
     final response = await _api.call3ds(url, body, contentType);
-    final completer = new Completer<Receipt>();
+    final completer = new Completer<Receipt?>();
     _cloudipspWebViewHolder(PrivateCloudipspWebViewConfirmation(
         Api.API_HOST, url, callbackUrl, response, completer));
     return completer.future;

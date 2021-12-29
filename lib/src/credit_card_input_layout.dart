@@ -11,7 +11,7 @@ import './credit_card_number_field.dart';
 import './credit_card.dart';
 
 abstract class CreditCardInputLayout extends Widget {
-  factory CreditCardInputLayout({Key key, Widget child}) =
+  factory CreditCardInputLayout({Key? key, required Widget child}) =
       CreditCardInputLayoutImpl;
 }
 
@@ -19,7 +19,7 @@ class CreditCardInputLayoutImpl extends StatefulWidget
     implements CreditCardInputLayout {
   final Widget _child;
 
-  CreditCardInputLayoutImpl({Key key, Widget child})
+  CreditCardInputLayoutImpl({Key? key, required Widget child})
       : _child = child,
         super(key: key);
 
@@ -43,22 +43,10 @@ class CreditCardInputLayoutState extends State<CreditCardInputLayoutImpl>
 
   CreditCardInputLayoutState(Widget child)
       : _child = child,
-        _number = _findNested(child),
-        _expMm = _findNested(child),
-        _expYy = _findNested(child),
-        _cvv = _findNested(child) {
-    if (_number == null) {
-      throw StateError('CreditCardNumberField must exists in view tree');
-    }
-    if (_expMm == null) {
-      throw StateError('CreditCardExpMmField must exists in view tree');
-    }
-    if (_expYy == null) {
-      throw StateError('CreditCardExpYyField must exists in view tree');
-    }
-    if (_cvv == null) {
-      throw StateError('CreditCardCvvField must exists in view tree');
-    }
+        _number = _findStrict(child, 'CreditCardNumberField'),
+        _expMm = _findStrict(child, 'CreditCardExpMmField'),
+        _expYy = _findStrict(child, 'CreditCardExpYyField'),
+        _cvv = _findStrict(child, 'CreditCardCvvField') {
     _number.textEditingController.addListener(() {
       _cvv.setCvv4(CvvUtils.isCvv4Length(_number.textEditingController.text));
     });
@@ -85,7 +73,15 @@ class CreditCardInputLayoutState extends State<CreditCardInputLayoutImpl>
     return _child;
   }
 
-  static T _findNested<T extends Widget>(Widget root) {
+  static T _findStrict<T extends Widget>(Widget root, String name) {
+    final result = _findNested<T>(root);
+    if (result == null) {
+      throw StateError('$name must exists in view tree');
+    }
+    return result;
+  }
+
+  static T? _findNested<T extends Widget>(Widget root) {
     if (root is T) {
       return root;
     }

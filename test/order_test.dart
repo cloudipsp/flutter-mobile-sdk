@@ -12,28 +12,16 @@ void main() {
           thrownArgumentError('Amount should be more than 0'));
     });
 
-    test('should throw exception with null currency', () {
-      expect(() => Order(1, null, '', '', ''),
-          thrownArgumentErrorNotNull('currency'));
-    });
     test('should throw exception with invalid currency', () {
       expect(() => Order(1, 'UA', '', '', ''),
           thrownArgumentErrorValue('UA', 'currency'));
     });
 
-    test('should throw exception with null id', () {
-      expect(() => Order(1, 'UAH', null, '', ''),
-          thrownArgumentErrorNotNull('id'));
-    });
     test('should throw exception invalid(empty) id', () {
       expect(() => Order(1, 'UAH', '', '', ''),
           thrownArgumentError("id's length should be > 0 && <= 1024"));
     });
 
-    test('should throw exception with null description', () {
-      expect(() => Order(1, 'UAH', 'OrderID', null, ''),
-          thrownArgumentErrorNotNull('description'));
-    });
     test('should throw exception with invalid(empty) description', () {
       expect(() => Order(1, 'UAH', 'OrderID', '', ''),
           thrownArgumentError("description's length should be > 0 && <= 1024"));
@@ -74,21 +62,13 @@ void main() {
 
   group('params', ()
   {
-    Order order;
+    late Order order;
 
     setUp(() {
       order = Order(1, 'UAH', '1234-45', 'Nice :)', 'example@test.com');
     });
 
-    tearDown(() {
-      order = null;
-    });
-
     group('productId', () {
-      test('should throw exception with null value', () {
-        expect(() => order.productId = null,
-            thrownArgumentErrorNotNull('ProductId'));
-      });
       test('should throw exception with invalid(huge) value', () {
         expect(() => order.productId = getRandomString(2000),
             thrownArgumentError('ProductId should be not more than 1024 symbols'));
@@ -100,10 +80,6 @@ void main() {
     });
 
     group('paymentSystems', () {
-      test('should throw exception with null value', () {
-        expect(() => order.paymentSystems = null,
-            thrownArgumentErrorNotNull('paymentSystems'));
-      });
       test('should save valid value', () {
         order.paymentSystems = 'SomeRandomPaymentSystem';
         expect(order.paymentSystems, 'SomeRandomPaymentSystem');
@@ -111,10 +87,6 @@ void main() {
     });
 
     group('defaultPaymentSystem', () {
-      test('should throw exception with null value', () {
-        expect(() => order.defaultPaymentSystem = null,
-            thrownArgumentErrorNotNull('defaultPaymentSystem'));
-      });
       test('should save valid value', () {
         order.defaultPaymentSystem = 'SomeRandomDefaultPaymentSystem';
         expect(order.defaultPaymentSystem, 'SomeRandomDefaultPaymentSystem');
@@ -122,10 +94,6 @@ void main() {
     });
 
     group('merchantData', () {
-      test('should throw exception with null value', () {
-        expect(() => order.merchantData = null,
-            thrownArgumentErrorNotNull('merchantData'));
-      });
       test('should throw exception with invalid(huge) value', () {
         expect(() => order.merchantData = getRandomString(2049),
             thrownArgumentError('MerchantData should be not more than 2048 symbols'));
@@ -137,10 +105,6 @@ void main() {
     });
 
     group('verificationType', () {
-      test('should throw exception with null value', () {
-        expect(() => order.verificationType = null,
-            thrownArgumentErrorNotNull('verificationType'));
-      });
       test('should save valid(amount) value', () {
         order.verificationType = Verification.amount;
         expect(order.verificationType, Verification.amount);
@@ -152,10 +116,6 @@ void main() {
     });
 
     group('recToken', () {
-      test('should throw exception with null value', () {
-        expect(() => order.recToken = null,
-            thrownArgumentErrorNotNull('recToken'));
-      });
       test('should save valid value', () {
         order.recToken = 'SomeRandomRecToken';
         expect(order.recToken, 'SomeRandomRecToken');
@@ -163,10 +123,6 @@ void main() {
     });
 
     group('version', () {
-      test('should throw exception with null value', () {
-        expect(() => order.version = null,
-            thrownArgumentErrorNotNull('version'));
-      });
       test('should throw exception with invalid(huge) value', () {
         expect(() => order.version = getRandomString(11),
             thrownArgumentError('version should be not more than 10 symbols'));
@@ -178,10 +134,6 @@ void main() {
     });
 
     group('lang', () {
-      test('should throw exception with null value', () {
-        expect(() => order.lang = null,
-            thrownArgumentErrorNotNull('lang'));
-      });
       test('should save valid(uk) value', () {
         order.lang = Lang.uk;
         expect(order.lang, Lang.uk);
@@ -193,10 +145,6 @@ void main() {
     });
 
     group('serverCallbackUrl', () {
-      test('should throw exception with null value', () {
-        expect(() => order.serverCallbackUrl = null,
-            thrownArgumentErrorNotNull('serverCallbackUrl'));
-      });
       test('should throw exception with invalid(huge) value', () {
         expect(() => order.serverCallbackUrl = getRandomString(2049),
             thrownArgumentError('server callback url should be not more than 2048 symbols'));
@@ -208,10 +156,6 @@ void main() {
     });
 
     group('reservationData', () {
-      test('should throw exception with null value', () {
-        expect(() => order.reservationData = null,
-            thrownArgumentErrorNotNull('reservationData'));
-      });
       test('should save valid value', () {
         order.reservationData = 'SomeRandomReservationData';
         expect(order.reservationData, 'SomeRandomReservationData');

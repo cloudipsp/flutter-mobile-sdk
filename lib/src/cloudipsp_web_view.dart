@@ -9,8 +9,8 @@ import './receipt.dart';
 
 abstract class CloudipspWebView extends Widget {
   factory CloudipspWebView(
-      {Key key,
-      CloudipspWebViewConfirmation confirmation}) = CloudipspWebViewImpl;
+      {required Key key,
+        required CloudipspWebViewConfirmation confirmation}) = CloudipspWebViewImpl;
 }
 
 class CloudipspWebViewImpl extends StatelessWidget implements CloudipspWebView {
@@ -31,7 +31,7 @@ class CloudipspWebViewImpl extends StatelessWidget implements CloudipspWebView {
 
   final PrivateCloudipspWebViewConfirmation _confirmation;
 
-  CloudipspWebViewImpl({Key key, CloudipspWebViewConfirmation confirmation})
+  CloudipspWebViewImpl({required Key key, required CloudipspWebViewConfirmation confirmation})
       : _confirmation = confirmation as PrivateCloudipspWebViewConfirmation,
         super(key: key);
 
@@ -59,7 +59,7 @@ class CloudipspWebViewImpl extends StatelessWidget implements CloudipspWebView {
     }
 
     if (detectsStartPattern || detectsCallbackUrl || detectsApiToken) {
-      Receipt receipt;
+      Receipt? receipt;
       if (detectsStartPattern) {
         final jsonOfConfirmation = url.split(URL_START_PATTERN)[1];
         dynamic response;

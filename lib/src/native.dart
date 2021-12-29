@@ -9,12 +9,14 @@ class Native {
 
   Native() : this.withChannel(_CHANNEL);
 
-  Future<bool> supportsApplePay() {
-    return _channel.invokeMethod('supportsApplePay');
+  Future<bool> supportsApplePay() async {
+    final result = await _channel.invokeMethod('supportsApplePay');
+    return result as bool;
   }
 
-  Future<bool> supportsGooglePay() {
-    return _channel.invokeMethod('supportsGooglePay');
+  Future<bool> supportsGooglePay() async {
+    final result = await _channel.invokeMethod('supportsGooglePay');
+    return result as bool;
   }
 
   Future<dynamic> applePay(

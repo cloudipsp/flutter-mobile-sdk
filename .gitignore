@@ -38,3 +38,4 @@ coverage/
 .packages
 pubspec.lock
 example/pubspec.lock
+test/*.mocks.dart

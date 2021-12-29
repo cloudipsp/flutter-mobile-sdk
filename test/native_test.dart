@@ -1,24 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:flutter/services.dart';
 
-import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
 import 'package:cloudipsp_mobile/src/native.dart';
 
-import './utils.dart';
+import './native_test.mocks.dart';
 
+@GenerateMocks([MethodChannel])
 void main() {
-  Native native;
-  MockedMethodChannel mockedMethodChannel;
+  late Native native;
+  late MockMethodChannel mockedMethodChannel;
 
   setUp(() {
-    mockedMethodChannel = MockedMethodChannel();
+    mockedMethodChannel = MockMethodChannel();
     native = Native.withChannel(mockedMethodChannel);
   });
 
   test('supportsApplePay invokes via channel', () async {
-    when(mockedMethodChannel.invokeMethod(any, any))
+    when(mockedMethodChannel.invokeMethod('supportsApplePay', any))
         .thenAnswer((_) async => true);
     final result = await native.supportsApplePay();
     verify(mockedMethodChannel.invokeMethod('supportsApplePay')).called(1);
@@ -26,7 +27,7 @@ void main() {
   });
 
   test('supportsGooglePay invokes via channel', () async {
-    when(mockedMethodChannel.invokeMethod(any, any))
+    when(mockedMethodChannel.invokeMethod('supportsGooglePay', any))
         .thenAnswer((_) async => false);
     final result = await native.supportsGooglePay();
     verify(mockedMethodChannel.invokeMethod('supportsGooglePay')).called(1);
@@ -34,7 +35,7 @@ void main() {
   });
 
   test('applePay invokes via channel with right params', () async {
-    when(mockedMethodChannel.invokeMethod(any, any))
+    when(mockedMethodChannel.invokeMethod('applePay', any))
         .thenAnswer((_) async => 'SomeResult');
     final config = {'someKey': 'someValue'};
     final result = await native.applePay(config, 100500, 'USD', 'testMock');
@@ -48,7 +49,7 @@ void main() {
   });
 
   test('applePayComplete invokes via channel with true', () async {
-    when(mockedMethodChannel.invokeMethod(any, any))
+    when(mockedMethodChannel.invokeMethod('applePayComplete', any))
         .thenAnswer((_) async => 'SomeResultAboutComplete');
     final result = await native.applePayComplete(true);
     verify(mockedMethodChannel.invokeMethod('applePayComplete', {'success': true}))
@@ -57,7 +58,7 @@ void main() {
   });
 
   test('applePayComplete invokes via channel with false', () async {
-    when(mockedMethodChannel.invokeMethod(any, any))
+    when(mockedMethodChannel.invokeMethod('applePayComplete', any))
         .thenAnswer((_) async => 'SomeResultAboutCompleteFalse');
     final result = await native.applePayComplete(false);
     verify(mockedMethodChannel.invokeMethod('applePayComplete', {'success': false}))
@@ -66,7 +67,7 @@ void main() {
   });
 
   test('googlePay invokes via channel with right params', () async {
-    when(mockedMethodChannel.invokeMethod(any, any))
+    when(mockedMethodChannel.invokeMethod('googlePay', any))
         .thenAnswer((_) async => 'SomeResultAboutGooglePay');
     final config = {'someKey': 'someValue'};
     final result = await native.googlePay(config);
@@ -74,5 +75,3 @@ void main() {
     expect(result, 'SomeResultAboutGooglePay');
   });
 }
-
-class MockedMethodChannel extends Mock implements MethodChannel {}

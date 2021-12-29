@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:http/http.dart' as http;
@@ -8,17 +11,20 @@ import 'package:cloudipsp_mobile/src/api.dart';
 import 'package:cloudipsp_mobile/src/credit_card.dart';
 import 'package:cloudipsp_mobile/src/platform_specific.dart';
 
+import './api_test.mocks.dart';
 import './utils.dart';
 
+
+@GenerateMocks([PlatformSpecific, http.Client])
 void main() {
-  Api api;
-  MockedHttpClient mockedHttpClient;
-  MockedPlatformSpecific mockedPlatformSpecific;
-  Order order;
+  late Api api;
+  late MockClient mockedHttpClient;
+  late MockPlatformSpecific mockedPlatformSpecific;
+  late Order order;
 
   setUp(() {
-    mockedHttpClient = MockedHttpClient();
-    mockedPlatformSpecific = MockedPlatformSpecific();
+    mockedHttpClient = MockClient();
+    mockedPlatformSpecific = MockPlatformSpecific();
     api = Api.withHttpClient(mockedPlatformSpecific, mockedHttpClient, false);
     order = Order(123, 'UAH', '1234-45', 'Nice :)', 'example@test.com');
 
@@ -336,10 +342,6 @@ void main() {
     expect(response.body, 'Anything');
   });
 }
-
-class MockedPlatformSpecific extends Mock implements PlatformSpecific {}
-
-class MockedHttpClient extends Mock implements http.Client {}
 
 const RESPONSE_GET_PAYMENT_CONFIG = '''
 {

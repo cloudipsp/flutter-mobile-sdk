@@ -1,4 +1,4 @@
-## 0.2.0
+## 0.3.0
 * Migrated to null-safety
 
 ## 0.0.1

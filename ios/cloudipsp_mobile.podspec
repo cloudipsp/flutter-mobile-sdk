@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'cloudipsp_mobile'
-  s.version          = '0.0.1'
+  s.version          = '0.3.0'
   s.summary          = 'Cloudipsp SDK for Mobile(Android, iOS)'
   s.description      = <<-DESC
 Cloudipsp SDK for Mobile(Android, iOS)

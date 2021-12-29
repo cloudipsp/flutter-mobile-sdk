@@ -9,6 +9,10 @@ class PlatformSpecific {
     return Platform.isIOS;
   }
 
+  String getOperatingSystem() {
+    return Platform.operatingSystem;
+  }
+
   String get operatingSystem {
     return Platform.operatingSystem;
   }

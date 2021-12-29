@@ -4,7 +4,7 @@ import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
 
 void main() {
   group('Receipt', () {
-    dynamic orderData;
+    late dynamic orderData;
     setUp(() {
       orderData = {
         'masked_card': '4444*6666',
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('basic parsing', () {
-      final receipt = Receipt.fromJson(orderData, 'mocked_response_url');
+      final receipt = Receipt.fromJson(orderData, 'mocked_response_url')!;
       expect(receipt.maskedCard, '4444*6666');
       expect(receipt.cardBin, 4444);
       expect(receipt.amount, 100500);
@@ -70,19 +70,19 @@ void main() {
 
     test('with date parsing', () {
       orderData['rectoken_lifetime'] = '05.01.2021 01:31:04';
-      final receipt = Receipt.fromJson(orderData, 'mocked_response_url');
+      final receipt = Receipt.fromJson(orderData, 'mocked_response_url')!;
       expect(receipt.recTokenLifeTime, DateTime(2021, 1, 5, 1, 31, 4));
     });
 
     test('with verification status', () {
       orderData['verification_status'] = 'verified';
-      final receipt = Receipt.fromJson(orderData, 'mocked_response_url');
+      final receipt = Receipt.fromJson(orderData, 'mocked_response_url')!;
       expect(receipt.verificationStatus, VerificationStatus.verified);
     });
 
     test('with string on ints position', () {
       orderData['card_bin'] = '4444';
-      final receipt = Receipt.fromJson(orderData, 'mocked_response_url');
+      final receipt = Receipt.fromJson(orderData, 'mocked_response_url')!;
       expect(receipt.cardBin, 4444);
     });
   });
