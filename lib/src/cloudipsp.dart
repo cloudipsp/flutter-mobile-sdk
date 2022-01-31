@@ -260,7 +260,7 @@ class CloudipspImpl implements Cloudipsp {
 
     final response = await _api.call3ds(url, body, contentType);
     final completer = new Completer<Receipt?>();
-    _cloudipspWebViewHolder(PrivateCloudipspWebViewConfirmation(
+    _cloudipspWebViewHolder(PrivateCloudipspWebViewConfirmation(_native,
         Api.API_HOST, url, callbackUrl, response, completer));
     return completer.future;
   }

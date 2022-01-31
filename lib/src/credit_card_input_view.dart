@@ -14,11 +14,11 @@ class CreditCardInputView extends StatefulWidget {
   CreditCardInputView(
       {Key? key,
       bool helperNeeded = false,
-        InputDecoration? inputNumberDecoration,
-        InputDecoration? inputExpMmDecoration,
-        InputDecoration? inputExpYyDecoration,
-        InputDecoration? inputCvvDecoration,
-        InputDecoration? inputDecoration})
+      InputDecoration? inputNumberDecoration,
+      InputDecoration? inputExpMmDecoration,
+      InputDecoration? inputExpYyDecoration,
+      InputDecoration? inputCvvDecoration,
+      InputDecoration? inputDecoration})
       : _helperNeeded = helperNeeded,
         _inputNumberDecoration = inputNumberDecoration,
         _inputExpMmDecoration = inputExpMmDecoration,
@@ -60,11 +60,11 @@ class CreditCardInputViewState extends State<CreditCardInputView>
 
   CreditCardInputViewState(
       {bool helperNeeded = false,
-        InputDecoration? inputNumberDecoration,
-        InputDecoration? inputExpMmDecoration,
-        InputDecoration? inputExpYyDecoration,
-        InputDecoration? inputCvvDecoration,
-        InputDecoration? inputDecoration})
+      InputDecoration? inputNumberDecoration,
+      InputDecoration? inputExpMmDecoration,
+      InputDecoration? inputExpYyDecoration,
+      InputDecoration? inputCvvDecoration,
+      InputDecoration? inputDecoration})
       : _helperNeeded = helperNeeded,
         _inputNumberDecoration = inputNumberDecoration,
         _inputExpMmDecoration = inputExpMmDecoration,
@@ -78,7 +78,7 @@ class CreditCardInputViewState extends State<CreditCardInputView>
       throw StateError("CreditCardInputView hasn't been rendered yet");
     }
     final creditCardInputLayoutState =
-    _creditCardInputLayoutKey.currentState as CreditCardInputLayoutState;
+        _creditCardInputLayoutKey.currentState as CreditCardInputLayoutState;
     return creditCardInputLayoutState.getCard();
   }
 

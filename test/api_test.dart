@@ -14,7 +14,6 @@ import 'package:cloudipsp_mobile/src/platform_specific.dart';
 import './api_test.mocks.dart';
 import './utils.dart';
 
-
 @GenerateMocks([PlatformSpecific, http.Client])
 void main() {
   late Api api;
@@ -115,16 +114,15 @@ void main() {
     });
     test('throws api error', () async {
       when(mockedHttpClient.post(any,
-          headers: anyNamed('headers'), body: anyNamed('body')))
+              headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(RESPONSE_ERROR, 200));
 
       await expectLater(
-              () => api.getPaymentConfig(
+          () => api.getPaymentConfig(
               token: 'SomeAlmostUniqueToken',
               methodId: 'TestMethodId',
               methodName: 'TestMethodName'),
-          thrownCloudipspApiError(
-              500111, 'ReqID44332211', 'SomeErrorMessage'));
+          thrownCloudipspApiError(500111, 'ReqID44332211', 'SomeErrorMessage'));
     });
   });
 

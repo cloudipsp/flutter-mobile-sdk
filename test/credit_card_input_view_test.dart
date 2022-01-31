@@ -9,12 +9,10 @@ import 'package:cloudipsp_mobile/src/credit_card_input_view.dart';
 import './utils.dart';
 
 void main() {
-  testWidgets('should render correctly CreditCardInputView', (
-      WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: CreditCardInputView())
-    ));
+  testWidgets('should render correctly CreditCardInputView',
+      (WidgetTester tester) async {
+    await tester
+        .pumpWidget(MaterialApp(home: Scaffold(body: CreditCardInputView())));
 
     expect(find.text('CardNumber:'), findsOneWidget);
     expect(find.text('Exp. Year'), findsOneWidget);
@@ -29,11 +27,10 @@ void main() {
 
   testWidgets('should returns valid card helper', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: CreditCardInputView(helperNeeded: true))));
+        home: Scaffold(body: CreditCardInputView(helperNeeded: true))));
 
-    final cardInputState = tester.state<CreditCardInputViewState>(
-        find.byType(CreditCardInputView));
+    final cardInputState = tester
+        .state<CreditCardInputViewState>(find.byType(CreditCardInputView));
 
     await tester.tap(find.text('CardNumber:'));
     final card1 = cardInputState.getCard() as PrivateCreditCard;
@@ -51,8 +48,10 @@ void main() {
   });
 
   test(
-      'should throw exception when CreditCardInputState did not rendered well, but card is going to take', () {
+      'should throw exception when CreditCardInputState did not rendered well, but card is going to take',
+      () {
     final cardInputViewState = CreditCardInputViewState();
-    expect(() => cardInputViewState.getCard(), thrownStateError("CreditCardInputView hasn't been rendered yet"));
+    expect(() => cardInputViewState.getCard(),
+        thrownStateError("CreditCardInputView hasn't been rendered yet"));
   });
 }

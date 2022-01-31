@@ -49,7 +49,9 @@ class Order {
     if (description.length == 0 || description.length > 1024) {
       throw ArgumentError("description's length should be > 0 && <= 1024");
     }
-    if (email != null && email!.isNotEmpty && !EmailValidator.validate(email!)) {
+    if (email != null &&
+        email!.isNotEmpty &&
+        !EmailValidator.validate(email!)) {
       throw ArgumentError("email is not valid");
     }
   }

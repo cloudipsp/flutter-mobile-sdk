@@ -44,16 +44,17 @@ void main() {
     expect(findWidget<CreditCardCvvField>(), findsOneWidget);
   });
 
-  testWidgets('should returns invalid card without entering', (WidgetTester tester) async {
+  testWidgets('should returns invalid card without entering',
+      (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: CreditCardInputLayout(
                 child: Column(children: [
-                  CreditCardNumberField(),
-                  CreditCardExpMmField(),
-                  CreditCardExpYyField(),
-                  CreditCardCvvField(),
-                ])))));
+      CreditCardNumberField(),
+      CreditCardExpMmField(),
+      CreditCardExpYyField(),
+      CreditCardCvvField(),
+    ])))));
 
     final cardInputState = tester.state<CreditCardInputLayoutState>(
         find.byType(CreditCardInputLayoutImpl));
@@ -62,16 +63,17 @@ void main() {
     expect(card.isValid(), false);
   });
 
-  testWidgets('should returns valid card by setHelpCard', (WidgetTester tester) async {
+  testWidgets('should returns valid card by setHelpCard',
+      (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: CreditCardInputLayout(
                 child: Column(children: [
-                  CreditCardNumberField(),
-                  CreditCardExpMmField(),
-                  CreditCardExpYyField(),
-                  CreditCardCvvField(),
-                ])))));
+      CreditCardNumberField(),
+      CreditCardExpMmField(),
+      CreditCardExpYyField(),
+      CreditCardCvvField(),
+    ])))));
 
     final cardInputState = tester.state<CreditCardInputLayoutState>(
         find.byType(CreditCardInputLayoutImpl));

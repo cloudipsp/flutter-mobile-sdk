@@ -3,6 +3,9 @@ package com.cloudipsp.mobile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.webkit.CookieManager;
+import android.webkit.ValueCallback;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,7 +64,13 @@ public class CloudipspMobilePlugin implements
         if ("supportsGooglePay".equals(call.method)) {
             supportsGooglePay(result);
         } else if ("googlePay".equals(call.method)) {
-            googlePay(new JSONObject((Map)call.arguments), result);
+            googlePay(new JSONObject((Map) call.arguments), result);
+        } else if ("setCookie".equals(call.method)) {
+            setCookie(
+                    call.<String>argument("url"),
+                    call.<String>argument("cookie"),
+                    result
+            );
         } else {
             result.notImplemented();
         }
@@ -112,6 +121,20 @@ public class CloudipspMobilePlugin implements
                 paymentsClient.loadPaymentData(request),
                 activity,
                 RC_GOOGLE_PAY);
+    }
+
+    private void setCookie(String url, String cookie, @NonNull final Result result) {
+        final CookieManager cookieManager = CookieManager.getInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.setCookie(url, cookie, new ValueCallback<Boolean>() {
+                @Override
+                public void onReceiveValue(Boolean value) {
+                    result.success(null);
+                }
+            });
+        } else {
+            cookieManager.setCookie(url, cookie);
+        }
     }
 
     @Override

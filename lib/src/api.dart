@@ -96,7 +96,8 @@ class Api {
     if (order.version != null && order.version!.isNotEmpty) {
       request['version'] = order.version;
     }
-    if (order.serverCallbackUrl != null && order.serverCallbackUrl!.isNotEmpty) {
+    if (order.serverCallbackUrl != null &&
+        order.serverCallbackUrl!.isNotEmpty) {
       request['server_callback_url'] = order.serverCallbackUrl;
     }
     if (order.reservationData != null && order.reservationData!.isNotEmpty) {
@@ -122,7 +123,8 @@ class Api {
   Future<Receipt> getOrder(String token) async {
     final response =
         await _call('api/checkout/merchant/order', {'token': token});
-    final receipt = Receipt.fromJson(response['order_data'], response['response_url']);
+    final receipt =
+        Receipt.fromJson(response['order_data'], response['response_url']);
     if (receipt == null) {
       throw CloudipspError('Unable to parse receipt');
     }

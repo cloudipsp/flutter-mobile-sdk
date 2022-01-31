@@ -36,4 +36,8 @@ class Native {
   Future<dynamic> googlePay(dynamic configData) {
     return _channel.invokeMethod('googlePay', configData);
   }
+
+  Future<void> androidAddCookie(String url, String cookie) {
+    return _channel.invokeMethod('setCookie', {'url': url, 'cookie': cookie});
+  }
 }

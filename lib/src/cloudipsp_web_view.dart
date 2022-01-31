@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 
@@ -9,8 +10,9 @@ import './receipt.dart';
 
 abstract class CloudipspWebView extends Widget {
   factory CloudipspWebView(
-      {required Key key,
-        required CloudipspWebViewConfirmation confirmation}) = CloudipspWebViewImpl;
+          {required Key key,
+          required CloudipspWebViewConfirmation confirmation}) =
+      CloudipspWebViewImpl;
 }
 
 class CloudipspWebViewImpl extends StatelessWidget implements CloudipspWebView {
@@ -31,17 +33,25 @@ class CloudipspWebViewImpl extends StatelessWidget implements CloudipspWebView {
 
   final PrivateCloudipspWebViewConfirmation _confirmation;
 
-  CloudipspWebViewImpl({required Key key, required CloudipspWebViewConfirmation confirmation})
+  CloudipspWebViewImpl(
+      {required Key key, required CloudipspWebViewConfirmation confirmation})
       : _confirmation = confirmation as PrivateCloudipspWebViewConfirmation,
         super(key: key);
 
-  void _onWebViewCreated(WebViewController controller) {
-    if (_confirmation != null) {
-      controller.evaluateJavascript(ADD_VIEWPORT_METADATA);
-      controller.loadUrl(Uri.dataFromString(_confirmation.response.body,
-              mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
-          .toString());
+  void _onWebViewCreated(WebViewController controller) async {
+    await controller.runJavascript(ADD_VIEWPORT_METADATA);
+
+    if (Platform.isAndroid) {
+      _confirmation.response.headers.forEach((key, value) async {
+        if (key.toLowerCase() == 'set-cookie') {
+          await _confirmation.native.androidAddCookie(_confirmation.baseUrl, value);
+        }
+      });
     }
+
+    await controller.loadHtmlString(_confirmation.response.body.toString(),
+      baseUrl: _confirmation.baseUrl
+    );
   }
 
   NavigationDecision _navigationDelegate(NavigationRequest request) {
@@ -80,6 +90,7 @@ class CloudipspWebViewImpl extends StatelessWidget implements CloudipspWebView {
   Widget build(BuildContext context) {
     return WebView(
         initialUrl: 'about:blank',
+        zoomEnabled: true,
         javascriptMode: JavascriptMode.unrestricted,
         navigationDelegate: _navigationDelegate,
         onWebViewCreated: _onWebViewCreated);

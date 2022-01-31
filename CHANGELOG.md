@@ -1,3 +1,7 @@
+## 0.4.0
+* Added extended cookie handling for android 3DS extra cases
+* Formatted code
+
 ## 0.3.0
 * Migrated to null-safety
 

@@ -5,8 +5,7 @@ import 'package:cloudipsp_mobile/cloudipsp_mobile.dart';
 import './utils.dart';
 
 void main() {
-  group('constructor', ()
-  {
+  group('constructor', () {
     test('should throw exception with wrong amount', () {
       expect(() => Order(-1, '', '', '', ''),
           thrownArgumentError('Amount should be more than 0'));
@@ -60,8 +59,7 @@ void main() {
     });
   });
 
-  group('params', ()
-  {
+  group('params', () {
     late Order order;
 
     setUp(() {
@@ -70,8 +68,10 @@ void main() {
 
     group('productId', () {
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.productId = getRandomString(2000),
-            thrownArgumentError('ProductId should be not more than 1024 symbols'));
+        expect(
+            () => order.productId = getRandomString(2000),
+            thrownArgumentError(
+                'ProductId should be not more than 1024 symbols'));
       });
       test('should save valid value', () {
         order.productId = 'SomeRandomProductId';
@@ -95,8 +95,10 @@ void main() {
 
     group('merchantData', () {
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.merchantData = getRandomString(2049),
-            thrownArgumentError('MerchantData should be not more than 2048 symbols'));
+        expect(
+            () => order.merchantData = getRandomString(2049),
+            thrownArgumentError(
+                'MerchantData should be not more than 2048 symbols'));
       });
       test('should save valid value', () {
         order.merchantData = 'SomeRandomMerchantData';
@@ -146,8 +148,10 @@ void main() {
 
     group('serverCallbackUrl', () {
       test('should throw exception with invalid(huge) value', () {
-        expect(() => order.serverCallbackUrl = getRandomString(2049),
-            thrownArgumentError('server callback url should be not more than 2048 symbols'));
+        expect(
+            () => order.serverCallbackUrl = getRandomString(2049),
+            thrownArgumentError(
+                'server callback url should be not more than 2048 symbols'));
       });
       test('should save valid value', () {
         order.serverCallbackUrl = 'SomeRandomServerCallbackUrl';
@@ -163,8 +167,10 @@ void main() {
     });
 
     test('should be able to add extra argument', () {
-      order.addArgument('MySuperUniqueArgumentName', 'MySuperUniqueArgumentValue');
-      expect(order.arguments['MySuperUniqueArgumentName'], 'MySuperUniqueArgumentValue');
+      order.addArgument(
+          'MySuperUniqueArgumentName', 'MySuperUniqueArgumentValue');
+      expect(order.arguments['MySuperUniqueArgumentName'],
+          'MySuperUniqueArgumentValue');
     });
   });
 }

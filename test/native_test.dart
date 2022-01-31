@@ -52,8 +52,8 @@ void main() {
     when(mockedMethodChannel.invokeMethod('applePayComplete', any))
         .thenAnswer((_) async => 'SomeResultAboutComplete');
     final result = await native.applePayComplete(true);
-    verify(mockedMethodChannel.invokeMethod('applePayComplete', {'success': true}))
-        .called(1);
+    verify(mockedMethodChannel
+        .invokeMethod('applePayComplete', {'success': true})).called(1);
     expect(result, 'SomeResultAboutComplete');
   });
 
@@ -61,8 +61,8 @@ void main() {
     when(mockedMethodChannel.invokeMethod('applePayComplete', any))
         .thenAnswer((_) async => 'SomeResultAboutCompleteFalse');
     final result = await native.applePayComplete(false);
-    verify(mockedMethodChannel.invokeMethod('applePayComplete', {'success': false}))
-        .called(1);
+    verify(mockedMethodChannel
+        .invokeMethod('applePayComplete', {'success': false})).called(1);
     expect(result, 'SomeResultAboutCompleteFalse');
   });
 

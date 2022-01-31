@@ -27,13 +27,12 @@ Matcher thrownUnsupported(String message) {
 }
 
 Matcher stateError(String message) {
-  return TypeMatcher<StateError>()
-      .having((e) => e.message, 'message', message);
+  return TypeMatcher<StateError>().having((e) => e.message, 'message', message);
 }
 
 Matcher thrownStateError(String message) {
-  return throwsA(TypeMatcher<StateError>()
-      .having((e) => e.message, 'message', message));
+  return throwsA(
+      TypeMatcher<StateError>().having((e) => e.message, 'message', message));
 }
 
 Matcher thrownCloudipspUserError(String code, String message) {

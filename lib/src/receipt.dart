@@ -145,6 +145,7 @@ class Receipt {
     if (value == null || value.isEmpty) {
       return null;
     }
+    value = value.toUpperCase();
     return CardType.values
         .firstWhere((element) => describeEnum(element) == value);
   }
