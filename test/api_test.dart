@@ -426,13 +426,13 @@ const RESPONSE_ERROR = '''
 const REQUEST_HEADERS = {
   'User-Agent': 'Flutter',
   'SDK-OS': 'UnitTestOS',
-  'SDK-Version': '0.0.1',
+  'SDK-Version': '0.4.1',
   'Accept': 'application/json',
   'Content-Type': 'application/json'
 };
 const REQUEST_HEADERS_3DS = {
   'User-Agent': 'Flutter',
   'SDK-OS': 'UnitTestOS',
-  'SDK-Version': '0.0.1',
+  'SDK-Version': '0.4.1',
   'Content-Type': 'application/whoknows'
 };

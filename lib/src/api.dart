@@ -201,7 +201,7 @@ class Api {
     return {
       'User-Agent': 'Flutter',
       'SDK-OS': _platformSpecific.operatingSystem,
-      'SDK-Version': '0.0.1'
+      'SDK-Version': '0.4.1'
     };
   }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -67,11 +69,12 @@ void main() {
   });
 
   test('googlePay invokes via channel with right params', () async {
+    final expectedResult = {'some': 'SomeResultAboutGooglePay'};
     when(mockedMethodChannel.invokeMethod('googlePay', any))
-        .thenAnswer((_) async => 'SomeResultAboutGooglePay');
+        .thenAnswer((_) async => jsonEncode(expectedResult));
     final config = {'someKey': 'someValue'};
     final result = await native.googlePay(config);
     verify(mockedMethodChannel.invokeMethod('googlePay', config)).called(1);
-    expect(result, 'SomeResultAboutGooglePay');
+    expect(result, expectedResult);
   });
 }

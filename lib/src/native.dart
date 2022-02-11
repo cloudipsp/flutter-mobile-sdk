@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 
 class Native {
@@ -33,8 +35,9 @@ class Native {
     return _channel.invokeMethod('applePayComplete', {'success': success});
   }
 
-  Future<dynamic> googlePay(dynamic configData) {
-    return _channel.invokeMethod('googlePay', configData);
+  Future<dynamic> googlePay(dynamic configData) async {
+    final serializedJson = await _channel.invokeMethod('googlePay', configData);
+    return jsonDecode(serializedJson);
   }
 
   Future<void> androidAddCookie(String url, String cookie) {
