@@ -51,9 +51,6 @@ class CloudipspImpl implements Cloudipsp {
       : _api = Api(PlatformSpecific()),
         _native = Native(),
         _platformSpecific = PlatformSpecific() {
-    if (!(merchantId > 0)) {
-      throw ArgumentError.value(merchantId, 'merchantId');
-    }
     _cloudipspWebViewHolder = cloudipspWebViewHolder;
   }
 
@@ -123,6 +120,9 @@ class CloudipspImpl implements Cloudipsp {
 
   @override
   Future<Receipt> applePay(Order order) async {
+    if (!(merchantId > 0)) {
+      throw ArgumentError.value(merchantId, 'merchantId');
+    }
     _assertApplePay();
     final config = await _api.getPaymentConfig(
       merchantId: merchantId,
@@ -184,6 +184,10 @@ class CloudipspImpl implements Cloudipsp {
 
   @override
   Future<Receipt> googlePay(Order order) async {
+    if (!(merchantId > 0)) {
+      throw ArgumentError.value(merchantId, 'merchantId');
+    }
+
     _assertGooglePay();
 
     final config = await _api.getPaymentConfig(
